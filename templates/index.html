@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>IGARF3</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.0/dist/leaflet.css" />
+  <link rel = "stylesheet" href = "static/css/style.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
+  <link rel="stylesheet" href="http://hydro.iis.u-tokyo.ac.jp/~yuta/pickadate.js-3.6.2/lib/themes/default.css">
+  <link rel="stylesheet" href="http://hydro.iis.u-tokyo.ac.jp/~yuta/pickadate.js-3.6.2/lib/themes/default.date.css">
+  <link rel="stylesheet" href="http://hydro.iis.u-tokyo.ac.jp/~yuta/pickadate.js-3.6.2/lib/themes/default.time.css">
+  <script src="https://unpkg.com/leaflet@1.3.0/dist/leaflet.js"></script>
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="http://hydro.iis.u-tokyo.ac.jp/~yuta/pickadate.js-3.6.2/lib/picker.js"></script>
+  <script src="http://hydro.iis.u-tokyo.ac.jp/~yuta/pickadate.js-3.6.2/lib/picker.date.js"></script>
+  <script src="http://hydro.iis.u-tokyo.ac.jp/~yuta/pickadate.js-3.6.2/lib/picker.time.js"></script>
+  <script src="http://hydro.iis.u-tokyo.ac.jp/~yuta/pickadate.js-3.6.2/lib/legacy.js"></script>
+</head>
+<header class="header">
+  <i class="fas fa-bars header__icon"></i>
+  <div class="alignRightBox">
+    <img class="logo" src="static/images/uTokyo.png">
+  <div>
+</header>
+<main class="content">
+  <div id="mapcontainer"></div>
+  <div id="hydrograph"></div>
+  <div class="datetimeInfo">
+    <h1>Initial Forecast Time</h1>
+    <p class="dateInfo">2000-01-01</p>
+    <p class="timeInfo">00:00</p>
+  </div>
+  <div class="sideMenu">
+    <div class="sideMenuInner">
+      <h2 class="sideMenuTitle">Settings</h2>
+      <i class="fas fa-times-circle sideMenu__icon"></i>
+    </div>
+    <p class="sideMenuTxt">Initial Forecast Date</p>
+    <input id="dateForm" type="text" placeholder="Enter an initial date">
+    <input id="timeForm" type="text" placeholder="Enter an initial time">
+    <input class="submitButton" type="submit" value="go">
+
+    <p class="sideMenuTxt">Region</p>
+    <input class="apple-switch" type="checkbox">
+    <p class="regionName" id="globalSwitch">Global</p>
+    <input class="apple-switch" type="checkbox">
+    <p class="regionName" id="japanSwitch">Japan</p>
+  </div>
+  <div class="sideMenu-bg"></div>
+<script src="static/app.js"></script>
+</main>
+</html>
