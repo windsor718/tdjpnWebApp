@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html>
+
+
 <head>
   <meta charset="UTF-8">
   <title>IGARF3</title>
@@ -17,12 +19,17 @@
   <script src="http://hydro.iis.u-tokyo.ac.jp/~yuta/pickadate.js-3.6.2/lib/picker.time.js"></script>
   <script src="http://hydro.iis.u-tokyo.ac.jp/~yuta/pickadate.js-3.6.2/lib/legacy.js"></script>
 </head>
+
+
 <header class="header">
   <i class="fas fa-bars header__icon"></i>
   <div class="alignRightBox">
+    <h1 class="headerText">Early Flood Warning System: IGAR-F3</h1>
     <img class="logo" src="static/images/uTokyo.png">
   <div>
 </header>
+
+
 <main class="content">
   <div id="mapcontainer"></div>
   <div id="hydrograph"></div>
@@ -31,6 +38,7 @@
     <p class="dateInfo">2000-01-01</p>
     <p class="timeInfo">00:00</p>
   </div>
+
   <div class="sideMenu">
     <div class="sideMenuInner">
       <h2 class="sideMenuTitle">Settings</h2>
@@ -40,14 +48,17 @@
     <input id="dateForm" type="text" placeholder="Enter an initial date">
     <input id="timeForm" type="text" placeholder="Enter an initial time">
     <input class="submitButton" type="submit" value="go">
-
     <p class="sideMenuTxt">Region</p>
-    <input class="apple-switch" type="checkbox">
+    <input value=1 class="apple-switch region-select" type="checkbox" id="checkBox_gl">
     <p class="regionName" id="globalSwitch">Global</p>
-    <input class="apple-switch" type="checkbox">
-    <p class="regionName" id="japanSwitch">Japan</p>
+    <input value=2 class="apple-switch region-select" type="checkbox" id="checkBox_jp">
+    <p checked="checked" class="regionName" id="japanSwitch">Japan</p>
   </div>
-  <div class="sideMenu-bg"></div>
-<script src="static/app.js"></script>
+  <div class="sideMenu-bg">
+    <div class="loading"></div>
+  </div>
+
+
 </main>
+<script src="static/app.js"></script>
 </html>
