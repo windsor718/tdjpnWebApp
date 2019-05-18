@@ -204,6 +204,15 @@ input.apple-switch:checked:after {
 #hydrograph:hover {
   opacity: 1.0;
 }
+#legend {
+  height: 100px;
+  width: 550px;
+  position: absolute;
+  z-index: 2;
+  opacity: 0.75;
+  bottom: 2.5vh;
+  right: 2.5vh;
+}
 
 .datetimeInfo {
   position: absolute;

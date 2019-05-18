@@ -38,7 +38,15 @@ def queryHydrograph(name, ID):
     data = xr.open_dataset("archive/%s.nc"%name).sel(ID=ID.encode()).to_array()
     dates = data["datetime"].values
     values = data.values[0]
-    out = [ dict([("dates",pd.to_datetime(dates[i]).strftime("%Y-%m-%d-%H -00")),("values",float(values[i]))]) for i in range(0, len(values)) ]
+    vDict = [ dict([("dates",pd.to_datetime(dates[i]).strftime("%Y-%m-%d-%H -00")),("values",float(values[i]))]) for i in range(0, len(values)) ]
+    
+    region = name.split("_")[1]
+    dDpi = xr.open_dataset("archive/dpiDischarge_%s.nc"%region).sel(ID=ID.encode()).to_array()
+    rYears = dDpi["rYear"].values.tolist()
+    dValues = dDpi.values[0].tolist()
+
+    out = dict([("rYears",rYears), ("dpiDischarges",dValues), ("series",vDict)])
+
     return out
 
 if __name__ == '__main__':

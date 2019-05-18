@@ -1,8 +1,17 @@
-//Basic developer preference:
+//Basic developer preference; global variables that is used in the multiple functions
 //what to visualize in the initial landing
-displayLoading();
 const region = "jp";
 //const region = "gl";
+const rYears = [10,50,100,200]
+const colors =  {
+    10: "#1E88E5",
+    50: "#43A047",
+    100: "#FDD835",
+    200: "#D32F2F"
+  };
+
+//Initializeing and create landing page:
+displayLoading();
 const initDateFile = {"filename":"latestDatetime_"+region+".json"};
 $("#checkBox_"+region).prop("checked", true);
 initDate(initDateFile).done(function(result) {
@@ -11,17 +20,16 @@ initDate(initDateFile).done(function(result) {
   removeLoading();
 });
 
-//Initializeing and create landing page:
 layers = new Array(); //global scope
 const d3box = initChart();
 const map = initMap(d3box); //global scope
 let layer = addPoints("archive/latest_"+region+".geojson", "latest_"+region);
 layers[region] = layer;
+//
 
 // Map drawing scripts
 function initMap(d3box) {
   /// Generate leaflet map layer and add GeoJSON layer from the url.
-
   const map = L.map('mapcontainer');
   map.setView([35.40, 136], 5);
   L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1Ijoid2luZHNvcjYzMCIsImEiOiJjanZtMzB3bXMweTZhNDBvZnljaGJkbGphIn0.337nen32QKVZ4WD_elH1cA', {
@@ -53,12 +61,6 @@ function addPoints(path, name) {
         },
 
         pointToLayer: function (feature, latlng) {
-          const colors = {
-            10: "#1E88E5",
-            50: "#43A047",
-            100: "#FDD835",
-            200: "#D32F2F"
-          };
           return L.circleMarker(latlng, {
             radius: 8,
             fillColor: colors[feature.properties.DPI],
@@ -86,9 +88,9 @@ function initChart() {
     ["2000-01-01-04 -00", 0]
   ];
  
-  const width = 500;
-  const height = 300;
-  const margin = { "top": 30, "bottom": 60, "right": 30, "left": 60 };
+  const width = 540;
+  const height = 340;
+  const margin = { "top": 15, "bottom": 90, "right": 30, "left": 60 };
  
   const svg = d3.select("#hydrograph").append("svg").attr("width", width).attr("height", height);
  
@@ -135,24 +137,61 @@ function initChart() {
     .datum(dataset)
     .attr("class", "line")
     .attr("fill", "none")
-    .attr("stroke", "steelblue")
+    .attr("stroke", "#1B2631")
     .attr("stroke-width", 1.5)
     .attr("d", d3.line()
       .x(function(d) { return xScale(parseDate(d[0])); })
       .y(function(d) { return yScale(d[1]); }));
 
+  const colorList = [];
+  for (let i in rYears) {
+    colorList.push(colors[rYears[i]])
+    svg.append("path")
+      .datum(dataset)
+      .attr("class", "rYear_"+rYears[i])
+      .attr("fill", "none")
+      .attr("stroke", colors[rYears[i]])
+      .attr("stroke-width", 2)
+      .attr("stroke-dasharray", "5 5")
+      .attr("d", d3.line()
+        .x(function(d) { return xScale(parseDate(d[0])); })
+        .y(function(d) { return yScale(rYears[i]); }));
+  }
+
+  const colorScale = d3.scaleOrdinal()
+    .domain(rYears)
+    .range(colorList)
+
+  svg.append('g')
+    .attr('class', 'legendLinear')
+    .attr('transform', "translate(" + 25 + "," + 290 + ")")
+
+  const legendLinear = d3.legendColor()
+    .shapeWidth(20)
+    .orient("horizontal")
+    .title("Recurrent Year")
+    .shapePadding(10)
+    .scale(colorScale);
+
+  svg.select('.legendLinear')
+    .style("font-size", "10px")
+    .call(legendLinear)
+
   return [xScale, yScale, svg]
 }
 
 function updateData(data, d3box) {
+  const rYears = data.rYears
+  const dpiDischarges = data.dpiDischarges
+  const series = data.series
   const xScale = d3box[0]
   const yScale = d3box[1]
   const svg = d3box[2]
 
   const parseDate = d3.timeParse("%Y-%m-%d-%H %Z");
   // Scale the range of the data again 
-  xScale.domain(d3.extent(data, function(d) { return parseDate(d.dates) }));
-  yScale.domain([0, d3.max(data, function(d) { return d.values; })]);
+  xScale.domain(d3.extent(series, function(d) { return parseDate(d.dates) }));
+  yScale.domain([0, d3.max(series, function(d) { return d.values; })*1.2]);
 
   const axisx = d3.axisBottom(xScale).ticks(5);
   const axisy = d3.axisLeft(yScale).ticks(5);
@@ -174,7 +213,17 @@ function updateData(data, d3box) {
   svg.select(".line")
       .transition()
       .duration(1000)
-      .attr("d", valueline(data));
+      .attr("d", valueline(series));
+  for (let i in rYears) {
+    svg.select(".rYear_"+rYears[i])
+      .datum(series)
+      .transition()
+      .duration(1000)
+      .attr("d",d3.line()
+        .x(function(d) {return xScale(parseDate(d.dates))})
+        .y(function(d) {return yScale(dpiDischarges[i])})
+      )
+  }
 };
 //
 
